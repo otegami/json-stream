@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module JSON
   module Stream
     # A character buffer that expects a UTF-8 encoded stream of bytes.
@@ -29,7 +31,7 @@ module JSON
       def <<(data)
         # Avoid state machine for complete UTF-8.
         if @buffer.empty?
-          data.force_encoding(Encoding::UTF_8)
+          (+data).force_encoding(Encoding::UTF_8)
           return data if data.valid_encoding?
         end
 

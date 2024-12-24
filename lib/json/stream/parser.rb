@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module JSON
   module Stream
     # Raised on any invalid JSON text.
@@ -102,8 +104,8 @@ module JSON
 
         # Track parse stack.
         @stack = []
-        @unicode = ""
-        @buf = ""
+        @unicode = +""
+        @buf = +""
         @pos = -1
 
         # Register any observers in the block.
@@ -178,7 +180,7 @@ module JSON
                 @state = :end_key
                 notify(:key, @buf)
               end
-              @buf = ""
+              @buf = +""
             when BACKSLASH
               @state = :start_escape
             when CONTROL
@@ -270,7 +272,7 @@ module JSON
               @buf << ch
             else
               end_value(@buf.to_i)
-              @buf = ""
+              @buf = +""
               @pos -= 1
               redo
             end
@@ -291,7 +293,7 @@ module JSON
               @buf << ch
             else
               end_value(@buf.to_f)
-              @buf = ""
+              @buf = +""
               @pos -= 1
               redo
             end
@@ -310,7 +312,7 @@ module JSON
             else
               error('Expected 0-9 digit') unless @buf =~ DIGIT_END
               end_value(@buf.to_f)
-              @buf = ""
+              @buf = +""
               @pos -= 1
               redo
             end
@@ -326,7 +328,7 @@ module JSON
               @buf << ch
             else
               end_value(@buf.to_i)
-              @buf = ""
+              @buf = +""
               @pos -= 1
               redo
             end
@@ -503,7 +505,7 @@ module JSON
 
         if @buf.size == word.size
           if @buf == word
-            @buf = ""
+            @buf = +""
             end_value(value)
           else
             error("Expected #{word} keyword")
